@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brady Electric — Daily Field Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #1a2744;
+    --gold: #f0a500;
+    --gold-light: #ffc94d;
+    --steel: #3d5068;
+    --light: #f4f6f9;
+    --border: #d0d8e4;
+    --text: #1a2744;
+    --muted: #6b7c93;
+    --white: #ffffff;
+    --danger: #c0392b;
+    --success: #27ae60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo-block { display: flex; flex-direction: column; }
+  .company-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .company-name span { color: var(--gold); }
+  .form-title {
+    font-size: 11px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+  .header-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 16px 16px 100px;
+  }
+
+  /* SECTION CARDS */
+  .section {
+    background: var(--white);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--navy);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-header.alt { background: var(--steel); }
+  .section-num {
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .section-body { padding: 14px 16px; }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+    margin-top: 12px;
+  }
+  label:first-child { margin-top: 0; }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(240,165,0,0.15);
+  }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7c93' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  /* TWO COLUMN */
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  /* CREW TABLE */
+  .crew-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .crew-table th {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--light);
+  }
+  .crew-table td { padding: 4px 4px; border-bottom: 1px solid var(--border); }
+  .crew-table tr:last-child td { border-bottom: none; }
+  .crew-table input {
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 8px;
+    font-size: 14px;
+    width: 100%;
+  }
+  .crew-table input[type="number"] { text-align: center; }
+
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: none;
+    border: 1.5px dashed var(--gold);
+    color: var(--gold);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .add-btn:hover { background: rgba(240,165,0,0.08); }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: #c0392b;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+  .remove-btn:hover { background: rgba(192,57,43,0.1); }
+
+  /* SCOPE CHANGE */
+  .scope-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
+  .toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border);
+    background: var(--white);
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .toggle-btn.active-yes {
+    border-color: var(--danger);
+    background: rgba(192,57,43,0.06);
+    color: var(--danger);
+  }
+  .toggle-btn.active-no {
+    border-color: var(--success);
+    background: rgba(39,174,96,0.06);
+    color: var(--success);
+  }
+  .scope-fields { display: none; }
+  .scope-fields.visible { display: block; }
+
+  /* SUBMIT AREA */
+  .submit-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-top: 2px solid var(--border);
+    padding: 12px 16px;
+    z-index: 100;
+  }
+  .submit-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .email-input-wrap { flex: 1; }
+  .email-input-wrap label { margin: 0 0 4px; }
+  .submit-btn {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .submit-btn:hover { background: var(--gold-light); }
+  .submit-btn:active { transform: scale(0.98); }
+
+  .copy-btn {
+    background: var(--steel);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 14px 14px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { background: var(--navy); }
+  .copy-btn:active { transform: scale(0.98); }
+
+  .copy-hint {
+    display: none;
+    font-size: 12px;
+    color: var(--success);
+    font-weight: 600;
+    text-align: center;
+    padding: 6px 0 0;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .copy-hint.show { display: block; }
+
+  /* TOAST */
+  .toast {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    color: var(--white);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 90vw;
+  }
+  .toast.show { display: block; }
+
+  /* REQUIRED STAR */
+  .req { color: var(--danger); margin-left: 2px; }
+
+  /* WEATHER PILLS */
+  .weather-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+  .pill {
+    padding: 7px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--white);
+  }
+  .pill.selected {
+    border-color: var(--gold);
+    background: rgba(240,165,0,0.1);
+    color: var(--navy);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 14px 0;
+  }
+
+  /* FIELD NOTE */
+  .field-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  @media (max-width: 480px) {
+    .row-2 { grid-template-columns: 1fr; gap: 0; }
+    .row-3 { grid-template-columns: 1fr 1fr; }
+    .submit-inner { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .email-input-wrap { width: 100%; flex: none; }
+    .submit-btn { flex: 1; }
+    .copy-btn { flex-shrink: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-block">
+      <div class="company-name">BRADY <span>ELECTRIC</span></div>
+      <div class="form-title">Daily Field Report</div>
+    </div>
+    <div class="header-badge">DFR</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SECTION 1: JOB INFO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Job Information</div>
+    </div>
+    <div class="section-body">
+      <div class="row-2">
+        <div>
+          <label>Job Name <span class="req">*</span></label>
+          <input type="text" id="jobName" placeholder="e.g. Riverside Plaza">
+        </div>
+        <div>
+          <label>Job Number <span class="req">*</span></label>
+          <input type="text" id="jobNumber" placeholder="e.g. 2024-047">
+        </div>
+      </div>
+      <div class="row-2">
+        <div>
+          <label>Date <span class="req">*</span></label>
+          <input type="date" id="reportDate">
+        </div>
+        <div>
+          <label>Foreman Name <span class="req">*</span></label>
+          <input type="text" id="foremanName" placeholder="Your name">
+        </div>
+      </div>
+      <label>Weather Conditions</label>
+      <div class="weather-pills" id="weatherPills">
+        <div class="pill" onclick="togglePill(this)">☀️ Clear</div>
+        <div class="pill" onclick="togglePill(this)">🌥️ Cloudy</div>
+        <div class="pill" onclick="togglePill(this)">🌧️ Rain</div>
+        <div class="pill" onclick="togglePill(this)">❄️ Snow/Ice</div>
+        <div class="pill" onclick="togglePill(this)">💨 High Wind</div>
+        <div class="pill" onclick="togglePill(this)">🌡️ Extreme Cold</div>
+        <div class="pill" onclick="togglePill(this)">🔥 Extreme Heat</div>
+      </div>
+      <label style="margin-top:12px;">Weather Notes (if delay or impact)</label>
+      <input type="text" id="weatherNotes" placeholder="e.g. Rained 10am–1pm, crew moved indoors">
+    </div>
+  </div>
+
+  <!-- SECTION 2: CREW & HOURS -->
+  <div class="section">
+    <div class="section-header alt">
+      <div class="section-num">2</div>
+      <div class="section-title">Crew & Hours Worked</div>
+    </div>
+    <div class="section-body">
+      <p class="field-note" style="margin-bottom:10px;">List each person individually — name, role, and hours on site today.</p>
+      <table class="crew-table" id="crewTable">
+        <thead>
+          <tr>
+            <th style="width:40%">Name</th>
+            <th style="width:30%">Role</th>
+            <th style="width:18%">Hours</th>
+            <th style="width:12%"></th>
+          </tr>
+        </thead>
+        <tbody id="crewBody">
+          <tr>
+            <td><input type="text" placeholder="Full name"></td>
+            <td>
+              <select>
+                <option value="">Role</option>
+                <option>Foreman</option>
+                <option>Journeyman</option>
+                <option>Apprentice</option>
+                <option>Helper</option>
+                <option>Master Electrician</option>
+              </select>
+            </td>
+            <td><input type="number" min="0" max="24" step="0.5" placeholder="8"></td>
+            <td><button class="remove-btn" onclick="removeRow(this)" title="Remove">×</button></td>
+          </tr>
+          <tr>
+            <td><input type="text" placeholder="Full name"></td>
+            <td>
+              <select>
+                <option value="">Role</option>
+                <option>Foreman</option>
+                <option>Journeyman</option>
+                <option>Apprentice</option>
+                <option>Helper</option>
+                <option>Master Electrician</option>
+              </select>
+            </td>
+            <td><input type="number" min="0" max="24" step="0.5" placeholder="8"></td>
+            <td><button class="remove-btn" onclick="removeRow(this)" title="Remove">×</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="add-btn" onclick="addCrewRow()">+ Add Crew Member</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3: WORK TODAY -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Work Completed Today</div>
+    </div>
+    <div class="section-body">
+      <label>Describe work completed <span class="req">*</span></label>
+      <textarea id="workCompleted" placeholder="Be specific — not just 'electrical work.' e.g. Rough-in on 2nd floor east wing rooms 201–206, pulled service entrance wire, installed 40 boxes." rows="4"></textarea>
+      <label style="margin-top:14px;">Work Planned for Tomorrow</label>
+      <textarea id="workTomorrow" placeholder="e.g. Continue rough-in rooms 207–212, confirm panel location with GC." rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 4: MATERIALS -->
+  <div class="section">
+    <div class="section-header alt">
+      <div class="section-num">4</div>
+      <div class="section-title">Materials</div>
+    </div>
+    <div class="section-body">
+      <label>Materials Used Today</label>
+      <p class="field-note">Anything pulled from the job site box, van stock, or supply house delivery.</p>
+      <textarea id="materialsUsed" placeholder="e.g. 200ft 12/2 Romex, 40 single-gang boxes, 1 box wire nuts, 2 junction boxes" rows="3"></textarea>
+      <div class="divider"></div>
+      <label>Materials Needed / To Be Ordered</label>
+      <p class="field-note">What needs to be ordered or delivered before next shift?</p>
+      <textarea id="materialsNeeded" placeholder="e.g. Need 100A panel, 4 breakers — required by Thursday AM. Call distributor." rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 5: SCOPE CHANGES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Scope Changes / Extra Work</div>
+    </div>
+    <div class="section-body">
+      <label>Any scope changes, verbal directives from GC, or extra work performed today?</label>
+      <div class="scope-toggle">
+        <button class="toggle-btn" id="scopeYes" onclick="setScopeChange(true)">⚠️ YES — Document It</button>
+        <button class="toggle-btn" id="scopeNo" onclick="setScopeChange(false)">✓ No Changes</button>
+      </div>
+      <div class="scope-fields" id="scopeFields">
+        <label>Who gave the directive?</label>
+        <input type="text" id="scopeWho" placeholder="Name and title (e.g. Dave M., GC superintendent)">
+        <label style="margin-top:10px;">Was it verbal or written?</label>
+        <select id="scopeType">
+          <option value="">Select</option>
+          <option>Verbal only</option>
+          <option>Written (email/text)</option>
+          <option>Formal change order</option>
+        </select>
+        <label style="margin-top:10px;">Describe the extra work or change</label>
+        <textarea id="scopeDesc" placeholder="What was added or changed? Be specific." rows="3"></textarea>
+        <p class="field-note" style="color: var(--danger); margin-top:6px;">⚠️ Verbal directives must be followed up with a written change order. Flag for office immediately.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: ISSUES -->
+  <div class="section">
+    <div class="section-header alt">
+      <div class="section-num">6</div>
+      <div class="section-title">Issues, Delays & RFIs</div>
+    </div>
+    <div class="section-body">
+      <label>Any delays, conflicts, access issues, or RFI needs?</label>
+      <textarea id="issues" placeholder="e.g. No access to mechanical room until 1pm — lost ~3 hrs. RFI needed on panel location in drawing set B3." rows="3"></textarea>
+      <div class="divider"></div>
+      <label>Subcontractor Coordination Notes</label>
+      <textarea id="subNotes" placeholder="e.g. HVAC crew in conflict with our rough-in path — need coordination meeting. Plumber completed rough on west wing." rows="3"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 7: ADDITIONAL NOTES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Additional Notes</div>
+    </div>
+    <div class="section-body">
+      <label>Anything else the office should know?</label>
+      <textarea id="additionalNotes" placeholder="Safety incidents, equipment issues, personnel issues, inspector visits, etc." rows="3"></textarea>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- SUBMIT BAR -->
+<div class="submit-area">
+  <div class="submit-inner">
+    <div class="email-input-wrap">
+      <label>Send report to</label>
+      <input type="email" id="recipientEmail" placeholder="office@bradyelectric.com" value="office@bradyelectric.com">
+    </div>
+    <button class="submit-btn" onclick="submitReport()">📤 Send Report</button>
+    <button class="copy-btn" onclick="copyReport()" id="copyBtn" title="Backup: copy report to clipboard">📋</button>
+  </div>
+  <div class="copy-hint" id="copyHint">Report copied! Open your email app, create a new message to the office, and paste.</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Set today's date on load
+  document.getElementById('reportDate').valueAsDate = new Date();
+
+  // Weather pills toggle
+  function togglePill(el) {
+    el.classList.toggle('selected');
+  }
+
+  // Scope change toggle
+  function setScopeChange(yes) {
+    const yesBtn = document.getElementById('scopeYes');
+    const noBtn = document.getElementById('scopeNo');
+    const fields = document.getElementById('scopeFields');
+    if (yes) {
+      yesBtn.classList.add('active-yes');
+      noBtn.classList.remove('active-no');
+      fields.classList.add('visible');
+    } else {
+      noBtn.classList.add('active-no');
+      yesBtn.classList.remove('active-yes');
+      fields.classList.remove('visible');
+    }
+  }
+
+  // Add crew row
+  function addCrewRow() {
+    const tbody = document.getElementById('crewBody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><input type="text" placeholder="Full name"></td>
+      <td>
+        <select>
+          <option value="">Role</option>
+          <option>Foreman</option>
+          <option>Journeyman</option>
+          <option>Apprentice</option>
+          <option>Helper</option>
+          <option>Master Electrician</option>
+        </select>
+      </td>
+      <td><input type="number" min="0" max="24" step="0.5" placeholder="8"></td>
+      <td><button class="remove-btn" onclick="removeRow(this)" title="Remove">×</button></td>
+    `;
+    tbody.appendChild(row);
+  }
+
+  function removeRow(btn) {
+    const row = btn.closest('tr');
+    const tbody = document.getElementById('crewBody');
+    if (tbody.rows.length > 1) {
+      row.remove();
+    } else {
+      showToast('Need at least one crew member.');
+    }
+  }
+
+  // Collect crew data
+  function getCrewData() {
+    const rows = document.querySelectorAll('#crewBody tr');
+    const crew = [];
+    rows.forEach(row => {
+      const name = row.cells[0].querySelector('input').value.trim();
+      const role = row.cells[1].querySelector('select').value;
+      const hours = row.cells[2].querySelector('input').value;
+      if (name) crew.push({ name, role, hours });
+    });
+    return crew;
+  }
+
+  // Get selected weather
+  function getWeather() {
+    const selected = [];
+    document.querySelectorAll('#weatherPills .pill.selected').forEach(p => {
+      selected.push(p.textContent.trim());
+    });
+    return selected.length ? selected.join(', ') : 'Not specified';
+  }
+
+  // Toast
+  function showToast(msg, duration = 3000) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  // Validate
+  function validate() {
+    const required = [
+      { id: 'jobName', label: 'Job Name' },
+      { id: 'jobNumber', label: 'Job Number' },
+      { id: 'reportDate', label: 'Date' },
+      { id: 'foremanName', label: 'Foreman Name' },
+      { id: 'workCompleted', label: 'Work Completed Today' },
+    ];
+    for (const f of required) {
+      const el = document.getElementById(f.id);
+      if (!el.value.trim()) {
+        el.focus();
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast(`Required: ${f.label}`);
+        return false;
+      }
+    }
+    const crew = getCrewData();
+    if (crew.length === 0) {
+      showToast('Add at least one crew member.');
+      return false;
+    }
+    return true;
+  }
+
+  // Build email body
+  function buildEmailBody() {
+    const val = id => (document.getElementById(id).value.trim() || '—');
+    const crew = getCrewData();
+    const crewLines = crew.map(c => `  • ${c.name} | ${c.role || 'N/A'} | ${c.hours || '?'} hrs`).join('\n');
+    const totalHours = crew.reduce((sum, c) => sum + (parseFloat(c.hours) || 0), 0);
+
+    const scopeActive = document.getElementById('scopeFields').classList.contains('visible');
+    const scopeSection = scopeActive
+      ? `⚠️ YES — Extra Work Documented
+  Who: ${val('scopeWho')}
+  Type: ${document.getElementById('scopeType').value || '—'}
+  Details: ${val('scopeDesc')}`
+      : '✓ No scope changes today';
+
+    const date = new Date(document.getElementById('reportDate').value + 'T12:00:00');
+    const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    return `BRADY ELECTRIC — DAILY FIELD REPORT
+${'='.repeat(50)}
+
+JOB: ${val('jobName')}    JOB #: ${val('jobNumber')}
+DATE: ${dateStr}
+FOREMAN: ${val('foremanName')}
+WEATHER: ${getWeather()}${val('weatherNotes') !== '—' ? '\nWEATHER NOTES: ' + val('weatherNotes') : ''}
+
+${'─'.repeat(50)}
+CREW & HOURS (Total: ${totalHours} hrs)
+${'─'.repeat(50)}
+${crewLines}
+
+${'─'.repeat(50)}
+WORK COMPLETED TODAY
+${'─'.repeat(50)}
+${val('workCompleted')}
+
+WORK PLANNED FOR TOMORROW:
+${val('workTomorrow')}
+
+${'─'.repeat(50)}
+MATERIALS
+${'─'.repeat(50)}
+USED TODAY:
+${val('materialsUsed')}
+
+TO BE ORDERED / NEEDED:
+${val('materialsNeeded')}
+
+${'─'.repeat(50)}
+SCOPE CHANGES / EXTRA WORK
+${'─'.repeat(50)}
+${scopeSection}
+
+${'─'.repeat(50)}
+ISSUES, DELAYS & RFIs
+${'─'.repeat(50)}
+${val('issues')}
+
+SUBCONTRACTOR NOTES:
+${val('subNotes')}
+
+${'─'.repeat(50)}
+ADDITIONAL NOTES
+${'─'.repeat(50)}
+${val('additionalNotes')}
+
+${'='.repeat(50)}
+Submitted via Brady Electric DFR — ${new Date().toLocaleString()}`;
+  }
+
+  // Copy report to clipboard (fallback)
+  function copyReport() {
+    if (!validate()) return;
+    const text = buildEmailBody();
+    const subject = `DFR — ${document.getElementById('jobName').value.trim()} — ${document.getElementById('reportDate').value} — ${document.getElementById('foremanName').value.trim()}`;
+    const full = `Subject: ${subject}\n\n${text}`;
+    navigator.clipboard.writeText(full).then(() => {
+      const hint = document.getElementById('copyHint');
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 6000);
+    }).catch(() => {
+      showToast('Could not copy — try the Send Report button instead.');
+    });
+  }
+
+  // Submit — opens Gmail compose in a new tab
+  function submitReport() {
+    if (!validate()) return;
+
+    const recipient = document.getElementById('recipientEmail').value.trim() || 'office@bradyelectric.com';
+    const jobName = document.getElementById('jobName').value.trim();
+    const date = document.getElementById('reportDate').value;
+    const foreman = document.getElementById('foremanName').value.trim();
+
+    const subject = encodeURIComponent(`DFR — ${jobName} — ${date} — ${foreman}`);
+    const body = encodeURIComponent(buildEmailBody());
+
+    // Gmail compose URL — navigates in same tab to avoid iOS popup blocking
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${subject}&body=${body}`;
+    window.location.href = gmailUrl;
+
+    showToast('Opening Gmail...', 3000);
+  }
+</script>
+</body>
+</html>
